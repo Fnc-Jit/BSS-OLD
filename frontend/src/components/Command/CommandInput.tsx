@@ -135,10 +135,10 @@ const CommandOutput = styled.div`
   font-size: 14px;
 `;
 
-const ErrorOutput = styled(CommandOutput)`
-  border-left-color: #ff0000;
-  color: #ff6666;
-`;
+// const ErrorOutput = styled(CommandOutput)`
+//   border-left-color: #ff0000;
+//   color: #ff6666;
+// `;
 
 const AVAILABLE_COMMANDS = [
   '/home',

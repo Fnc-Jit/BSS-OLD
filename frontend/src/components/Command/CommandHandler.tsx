@@ -50,7 +50,7 @@ export const CommandHandler: React.FC<CommandHandlerProps> = ({
     }
     return commandHistories[contextKey];
   });
-  const [navigationHistory, setNavigationHistory] = useState<string[]>([]);
+  // const [navigationHistory, setNavigationHistory] = useState<string[]>([]);
 
   // Update results when context changes
   useEffect(() => {
@@ -185,7 +185,7 @@ export const CommandHandler: React.FC<CommandHandlerProps> = ({
         }
         
         // Update navigation history
-        setNavigationHistory(prev => [...prev, command]);
+        // setNavigationHistory(prev => [...prev, command]);
       } else {
         addResult(command, data.message || 'Command failed', 'error');
       }
