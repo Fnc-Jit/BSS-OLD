@@ -129,6 +129,21 @@ This project uses spec-driven development. See `.kiro/specs/neo-bbs-forum/` for:
 - `design.md` - Technical design
 - `tasks.md` - Implementation tasks
 
+## 🚀 Deployment
+
+### Deploy to Vercel
+
+This project is Vercel-ready! See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed instructions.
+
+**Quick Deploy:**
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Fnc-Jit/BSS-OLD)
+
+**Requirements:**
+- MongoDB Atlas account
+- OpenAI API key
+- Environment variables configured
+
 ## 🤝 Contributing
 
 1. Fork the repository
