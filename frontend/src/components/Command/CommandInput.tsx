@@ -126,14 +126,14 @@ const AutocompleteItem = styled.div<{ $isSelected: boolean }>`
   }
 `;
 
-const CommandOutput = styled.div`
-  margin-top: 10px;
-  padding: 10px;
-  border-left: 2px solid ${props => props.theme.accentColor};
-  white-space: pre-wrap;
-  font-family: ${props => props.theme.accentFont};
-  font-size: 14px;
-`;
+// const CommandOutput = styled.div`
+//   margin-top: 10px;
+//   padding: 10px;
+//   border-left: 2px solid ${props => props.theme.accentColor};
+//   white-space: pre-wrap;
+//   font-family: ${props => props.theme.accentFont};
+//   font-size: 14px;
+// `;
 
 // const ErrorOutput = styled(CommandOutput)`
 //   border-left-color: #ff0000;
