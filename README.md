@@ -39,26 +39,45 @@ But this time, it's haunted.
 - MongoDB Atlas account
 - OpenAI API key
 
-### Backend Setup
+### Easy Start (Recommended)
+
+**macOS/Linux:**
+```bash
+./start-dev.sh
+```
+
+**Windows:**
+```bash
+start-dev.bat
+```
+
+This will start both servers automatically!
+
+### Manual Setup
+
+#### Backend Setup
 
 ```bash
 cd backend
-python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 cp .env.example .env
 # Edit .env with your configuration
-uvicorn app.main:app --reload --port 8000
+uvicorn app.main:app --reload
 ```
 
-### Frontend Setup
+#### Frontend Setup
 
 ```bash
 cd frontend
 npm install
-cp .env.example .env
 npm start
 ```
+
+### Access Points
+
+- **Frontend:** http://localhost:3000
+- **Backend API:** http://localhost:8000
+- **API Docs:** http://localhost:8000/docs
 
 Visit http://localhost:3000 to enter the haunted BBS.
 
