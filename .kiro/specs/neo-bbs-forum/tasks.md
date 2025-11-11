@@ -288,7 +288,7 @@
     - Display "CONNECTION LOST", "INVALID COMMAND", "SYSTEM OVERLOAD" messages
     - _Requirements: 1.5, 3.3_
   
-  - [ ] 15.2 Add loading states and feedback
+  - [x] 15.2 Add loading states and feedback
     - Implement loading indicators with terminal-style animations
     - Add success messages for user actions (post created, reply sent)
     - Create rate limit cooldown timer display
