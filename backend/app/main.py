@@ -9,16 +9,17 @@ async def lifespan(app: FastAPI):
     """Manage application lifespan - startup and shutdown."""
     # Startup: Connect to databases
     await db_manager.connect()
-    print("💀 Connected to MongoDB Atlas clusters")
-    print("   - Crypt cluster: Ready")
-    print("   - Parlor cluster: Ready")
-    print("   - Comedy Night cluster: Ready")
+    print("💀 Neo-BBS is waking up from the grave...")
+    print("   🔗 Connected to Crypt cluster - spirits are gathering")
+    print("   🔗 Connected to Parlor cluster - the séance begins")
+    print("   🔗 Connected to Comedy Night cluster - ghosts are laughing")
+    print("   ✨ All systems haunted and ready!")
     
     yield
     
     # Shutdown: Close database connections
     await db_manager.close()
-    print("👻 Database connections closed")
+    print("👻 The spirits have returned to rest... connections closed")
 
 
 app = FastAPI(
