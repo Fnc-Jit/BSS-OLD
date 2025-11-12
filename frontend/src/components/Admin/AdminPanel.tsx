@@ -94,7 +94,8 @@ export const AdminPanel: React.FC = () => {
   const fetchPermissions = async () => {
     try {
       const token = localStorage.getItem('access_token');
-      const response = await fetch('http://127.0.0.1:8000/api/admin/permissions', {
+      const apiUrl = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000';
+      const response = await fetch(`${apiUrl}/api/admin/permissions`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

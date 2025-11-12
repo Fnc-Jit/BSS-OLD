@@ -151,8 +151,9 @@ export const UserManagement: React.FC = () => {
     setMessage(null);
     
     try {
+      const apiUrl = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000';
       const token = localStorage.getItem('access_token');
-      const response = await fetch(`http://127.0.0.1:8000/api/admin/users/${searchTerm}`, {
+      const response = await fetch(`${apiUrl}/api/admin/users/${searchTerm}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -177,8 +178,9 @@ export const UserManagement: React.FC = () => {
     setMessage(null);
     
     try {
+      const apiUrl = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000';
       const token = localStorage.getItem('access_token');
-      const response = await fetch('http://127.0.0.1:8000/api/admin/users/lock', {
+      const response = await fetch(`${apiUrl}/api/admin/users/lock`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -210,8 +212,9 @@ export const UserManagement: React.FC = () => {
     setMessage(null);
     
     try {
+      const apiUrl = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000';
       const token = localStorage.getItem('access_token');
-      const response = await fetch(`http://127.0.0.1:8000/api/admin/users/${userId}/unlock`, {
+      const response = await fetch(`${apiUrl}/api/admin/users/${userId}/unlock`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`

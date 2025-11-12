@@ -132,7 +132,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess, onCancel }
         ? { email, password }
         : { email, username, password };
 
-      const response = await fetch(`http://127.0.0.1:8000${endpoint}`, {
+      const apiUrl = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000';
+      const response = await fetch(`${apiUrl}${endpoint}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
