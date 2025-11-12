@@ -66,29 +66,48 @@ const ButtonGroup = styled.div`
 `;
 
 const Button = styled.button<{ variant?: 'primary' | 'secondary' }>`
-  background: ${props => props.variant === 'primary' 
-    ? props.theme.accentColor 
-    : 'none'};
-  border: 2px solid ${props => props.theme.textColor};
-  color: ${props => props.variant === 'primary' 
-    ? props.theme.backgroundColor 
-    : props.theme.textColor};
-  padding: 10px 20px;
-  font-family: 'Courier New', monospace;
+  background: transparent;
+  border: none;
+  color: ${props => props.variant === 'primary' ? '#ff3366' : '#999'};
+  padding: 8px 20px;
+  padding-bottom: 12px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.9em;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  position: relative;
+  
+  /* Ruler notches at bottom */
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background-image: repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.3) 0px,
+      rgba(255, 255, 255, 0.3) 1px,
+      transparent 1px,
+      transparent 8px
+    );
+  }
   
   &:hover:not(:disabled) {
-    background-color: ${props => props.variant === 'primary'
-      ? props.theme.accentColor
-      : props.theme.textColor}20;
-    border-color: ${props => props.theme.accentColor};
-    transform: translateY(-2px);
+    color: ${props => props.variant === 'primary' ? '#ff6699' : '#fff'};
   }
   
   &:disabled {
-    opacity: 0.5;
+    opacity: 0.3;
     cursor: not-allowed;
+  }
+  
+  &:active:not(:disabled) {
+    transform: scale(0.98);
   }
 `;
 

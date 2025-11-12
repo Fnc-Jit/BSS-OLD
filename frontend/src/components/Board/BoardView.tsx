@@ -74,24 +74,80 @@ const EmptyState = styled.div`
 `;
 
 const BackButton = styled.button`
-  background: none;
-  border: 2px solid ${props => props.theme.textColor};
-  color: ${props => props.theme.textColor};
-  padding: 10px 20px;
-  font-family: 'Courier New', monospace;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  padding: 8px 16px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.85em;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
   cursor: pointer;
   margin-bottom: 20px;
-  transition: all 0.2s ease;
+  position: relative;
+  transition: all 0.3s ease;
+  
+  &::before {
+    content: '[';
+    position: absolute;
+    left: -8px;
+    color: rgba(255, 255, 255, 0.4);
+    transition: all 0.3s ease;
+  }
+  
+  &::after {
+    content: ']';
+    position: absolute;
+    right: -8px;
+    color: rgba(255, 255, 255, 0.4);
+    transition: all 0.3s ease;
+  }
   
   &:hover {
-    background-color: ${props => props.theme.textColor}20;
-    border-color: ${props => props.theme.accentColor};
-    color: ${props => props.theme.accentColor};
+    color: #ff3366;
+    border-bottom-color: #ff3366;
+    
+    &::before,
+    &::after {
+      color: #ff3366;
+    }
+    
+    &::before {
+      left: -12px;
+    }
+    
+    &::after {
+      right: -12px;
+    }
+  }
+  
+  &:active {
+    transform: translateY(1px);
   }
 `;
 
 const NewThreadButton = styled(BackButton)`
   float: right;
+  color: #ff3366;
+  border-bottom-color: rgba(255, 51, 102, 0.5);
+  
+  &::before,
+  &::after {
+    color: rgba(255, 51, 102, 0.6);
+  }
+  
+  &:hover {
+    color: #ff6699;
+    border-bottom-color: #ff6699;
+    text-shadow: 0 0 10px rgba(255, 51, 102, 0.5);
+    
+    &::before,
+    &::after {
+      color: #ff6699;
+    }
+  }
 `;
 
 interface BoardViewProps {

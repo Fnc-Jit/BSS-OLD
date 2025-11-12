@@ -1,73 +1,139 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+
+const glitch = keyframes`
+  0%, 100% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+`;
 
 const FormContainer = styled.div`
-  max-width: 500px;
+  max-width: 600px;
   margin: 50px auto;
-  padding: 30px;
-  border: 2px solid #00ff00;
-  background: rgba(0, 0, 0, 0.8);
+  padding: 40px;
+  background: rgba(20, 20, 20, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0;
+  box-shadow: 
+    0 0 40px rgba(0, 0, 0, 0.8),
+    inset 0 0 40px rgba(0, 0, 0, 0.5);
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #ff3366, transparent, #ff3366);
+    z-index: -1;
+    opacity: 0.3;
+  }
 `;
 
 const Title = styled.h1`
-  color: #00ff00;
+  color: #fff;
   text-align: center;
-  font-family: 'Courier New', monospace;
-  text-shadow: 0 0 10px #00ff00;
-  margin-bottom: 30px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 2.5em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  margin-bottom: 10px;
+  
+  span {
+    color: #ff3366;
+    animation: ${glitch} 3s infinite;
+  }
+`;
+
+const Subtitle = styled.div`
+  text-align: center;
+  color: #666;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.85em;
+  margin-bottom: 40px;
+  letter-spacing: 2px;
 `;
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 25px;
 `;
 
 const FormGroup = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 8px;
 `;
 
 const Label = styled.label`
-  color: #00ff00;
-  font-family: 'Courier New', monospace;
-  font-size: 0.9em;
+  color: #999;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.85em;
   text-transform: uppercase;
+  letter-spacing: 1px;
 `;
 
 const Input = styled.input`
-  padding: 10px;
-  background: #000;
-  border: 1px solid #00ff00;
-  color: #00ff00;
-  font-family: 'Courier New', monospace;
-  font-size: 1em;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-left: 3px solid #ff3366;
+  color: #fff;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.1em;
+  transition: all 0.3s;
   
   &:focus {
     outline: none;
-    box-shadow: 0 0 10px #00ff00;
+    border-color: #ff3366;
+    box-shadow: 0 0 20px rgba(255, 51, 102, 0.2);
+    background: rgba(0, 0, 0, 0.7);
   }
   
   &::placeholder {
-    color: #006600;
+    color: #444;
   }
 `;
 
 const Button = styled.button`
-  padding: 15px;
-  background: #00ff00;
-  color: #000;
+  padding: 18px;
+  background: linear-gradient(135deg, #ff3366 0%, #cc0033 100%);
+  color: #fff;
   border: none;
-  font-family: 'Courier New', monospace;
-  font-size: 1.1em;
-  font-weight: bold;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.2em;
+  font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 2px;
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
   transition: all 0.3s;
   
-  &:hover {
-    box-shadow: 0 0 20px #00ff00;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+  }
+  
+  &:hover:not(:disabled) {
+    box-shadow: 0 0 30px rgba(255, 51, 102, 0.5);
+    transform: translateY(-2px);
+    
+    &::before {
+      left: 100%;
+    }
   }
   
   &:disabled {
@@ -77,35 +143,48 @@ const Button = styled.button`
 `;
 
 const Message = styled.div<{ type: 'success' | 'error' }>`
-  padding: 10px;
-  border: 1px solid ${props => props.type === 'success' ? '#00ff00' : '#ff0000'};
-  color: ${props => props.type === 'success' ? '#00ff00' : '#ff0000'};
-  background: rgba(0, 0, 0, 0.5);
-  font-family: 'Courier New', monospace;
-  text-align: center;
+  padding: 15px;
+  border-left: 3px solid ${props => props.type === 'success' ? '#00ff88' : '#ff3366'};
+  background: ${props => props.type === 'success' ? 'rgba(0, 255, 136, 0.1)' : 'rgba(255, 51, 102, 0.1)'};
+  color: ${props => props.type === 'success' ? '#00ff88' : '#ff3366'};
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.9em;
 `;
 
 const ToggleLink = styled.button`
   background: none;
   border: none;
-  color: #00ff00;
-  font-family: 'Courier New', monospace;
-  text-decoration: underline;
+  color: #ff3366;
+  font-family: 'Share Tech Mono', monospace;
+  text-decoration: none;
   cursor: pointer;
   margin-top: 10px;
+  font-size: 0.9em;
+  transition: all 0.3s;
   
   &:hover {
-    text-shadow: 0 0 5px #00ff00;
+    text-shadow: 0 0 10px rgba(255, 51, 102, 0.5);
+    letter-spacing: 1px;
   }
 `;
 
 const InfoBox = styled.div`
-  margin-top: 20px;
-  padding: 15px;
-  border: 1px solid #888;
-  color: #888;
-  font-family: 'Courier New', monospace;
+  margin-top: 30px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.3);
+  color: #666;
+  font-family: 'Share Tech Mono', monospace;
   font-size: 0.85em;
+  line-height: 1.8;
+  
+  strong {
+    color: #999;
+  }
+  
+  p {
+    margin: 5px 0;
+  }
 `;
 
 interface LoginFormProps {
@@ -127,12 +206,12 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess, onCancel }
     setMessage(null);
 
     try {
+      const apiUrl = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000';
       const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
       const body = isLogin 
         ? { email, password }
         : { email, username, password };
 
-      const apiUrl = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000';
       const response = await fetch(`${apiUrl}${endpoint}`, {
         method: 'POST',
         headers: {
@@ -145,28 +224,26 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess, onCancel }
         const data = await response.json();
         
         if (isLogin) {
-          // Store tokens
           localStorage.setItem('access_token', data.access_token);
           localStorage.setItem('refresh_token', data.refresh_token);
           localStorage.setItem('user', JSON.stringify(data.user));
           
-          setMessage({ text: '✅ Login successful!', type: 'success' });
+          setMessage({ text: '✓ ACCESS GRANTED', type: 'success' });
           
-          // Call success callback
           setTimeout(() => {
             onLoginSuccess(data.user);
           }, 500);
         } else {
-          setMessage({ text: '✅ Registration successful! Please login.', type: 'success' });
+          setMessage({ text: '✓ REGISTRATION COMPLETE', type: 'success' });
           setIsLogin(true);
           setPassword('');
         }
       } else {
         const error = await response.json();
-        setMessage({ text: '❌ ' + (error.detail || 'Operation failed'), type: 'error' });
+        setMessage({ text: '✗ ' + (error.detail || 'OPERATION FAILED'), type: 'error' });
       }
     } catch (error: any) {
-      setMessage({ text: '❌ Network error: ' + error.message, type: 'error' });
+      setMessage({ text: '✗ CONNECTION ERROR: ' + error.message, type: 'error' });
     } finally {
       setLoading(false);
     }
@@ -174,28 +251,31 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess, onCancel }
 
   return (
     <FormContainer>
-      <Title>👻 {isLogin ? 'LOGIN' : 'REGISTER'} 👻</Title>
+      <Title>
+        {isLogin ? 'L' : 'R'}<span>O</span>{isLogin ? 'GIN' : 'EGISTER'}
+      </Title>
+      <Subtitle>// {isLogin ? 'AUTHENTICATE' : 'CREATE_ACCOUNT'}</Subtitle>
       
       <Form onSubmit={handleSubmit}>
         <FormGroup>
-          <Label>Email:</Label>
+          <Label>EMAIL:</Label>
           <Input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="ghost@neobbs.com"
+            placeholder="user@system.net"
             required
           />
         </FormGroup>
 
         {!isLogin && (
           <FormGroup>
-            <Label>Username:</Label>
+            <Label>USERNAME:</Label>
             <Input
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="ghost_user"
+              placeholder="operator_name"
               minLength={3}
               maxLength={50}
               required
@@ -204,19 +284,19 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess, onCancel }
         )}
 
         <FormGroup>
-          <Label>Password:</Label>
+          <Label>PASSWORD:</Label>
           <Input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="••••••••"
+            placeholder="••••••••••••"
             minLength={8}
             required
           />
         </FormGroup>
 
         <Button type="submit" disabled={loading}>
-          {loading ? 'Processing...' : isLogin ? 'Login' : 'Register'}
+          {loading ? 'PROCESSING...' : isLogin ? 'AUTHENTICATE' : 'CREATE ACCOUNT'}
         </Button>
 
         {message && (
@@ -229,21 +309,21 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess, onCancel }
           setIsLogin(!isLogin);
           setMessage(null);
         }}>
-          {isLogin ? 'Need an account? Register here' : 'Already have an account? Login here'}
+          {isLogin ? '→ CREATE NEW ACCOUNT' : '→ BACK TO LOGIN'}
         </ToggleLink>
 
         {onCancel && (
           <ToggleLink type="button" onClick={onCancel}>
-            ← Back to home
+            ← RETURN TO MAIN
           </ToggleLink>
         )}
       </Form>
 
       {isLogin && (
         <InfoBox>
-          <p><strong>Test Admin Account:</strong></p>
-          <p>Email: admin@neobbs.com</p>
-          <p>Password: admin123456</p>
+          <p><strong>// TEST_CREDENTIALS</strong></p>
+          <p>EMAIL: admin@neobbs.com</p>
+          <p>PASS: admin123456</p>
         </InfoBox>
       )}
     </FormContainer>

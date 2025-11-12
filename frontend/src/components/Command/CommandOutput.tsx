@@ -2,55 +2,51 @@ import React from 'react';
 import styled from 'styled-components';
 
 const OutputContainer = styled.div`
-  margin-top: 20px;
-  margin-bottom: 20px;
-  font-family: ${props => props.theme.accentFont};
-  font-size: 16px;
-  line-height: 1.6;
+  margin: 15px 0;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.9em;
 `;
 
 const OutputLine = styled.div<{ $type?: 'success' | 'error' | 'info' }>`
-  padding: 20px 24px;
-  margin: 12px 0;
-  border: 2px solid ${props => {
+  padding: 15px 20px;
+  margin: 10px 0;
+  border-left: 3px solid ${props => {
     switch (props.$type) {
-      case 'error': return '#ff0000';
-      case 'success': return props.theme.accentColor;
-      case 'info': return props.theme.textColor + '60';
-      default: return props.theme.textColor + '40';
+      case 'error': return '#ff3366';
+      case 'success': return '#00ff88';
+      case 'info': return '#666';
+      default: return '#444';
     }
   }};
-  border-left: 4px solid ${props => {
+  background: ${props => {
     switch (props.$type) {
-      case 'error': return '#ff0000';
-      case 'success': return props.theme.accentColor;
-      case 'info': return props.theme.textColor + '80';
-      default: return props.theme.textColor + '40';
+      case 'error': return 'rgba(255, 51, 102, 0.05)';
+      case 'success': return 'rgba(0, 255, 136, 0.05)';
+      default: return 'rgba(20, 20, 20, 0.5)';
     }
   }};
   color: ${props => {
     switch (props.$type) {
-      case 'error': return '#ff6666';
-      case 'success': return props.theme.accentColor;
-      default: return props.theme.textColor;
+      case 'error': return '#ff3366';
+      case 'success': return '#00ff88';
+      default: return '#999';
     }
   }};
   white-space: pre-wrap;
   word-wrap: break-word;
-  background: ${props => props.theme.backgroundColor}ee;
-  text-align: left;
-  border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  overflow: visible;
-  max-height: none;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  line-height: 1.6;
 `;
 
 const CommandEcho = styled.div`
-  color: ${props => props.theme.textColor}80;
-  margin-bottom: 12px;
-  font-style: italic;
-  font-size: 15px;
-  padding-left: 4px;
+  color: #666;
+  margin-bottom: 8px;
+  font-size: 0.85em;
+  
+  &::before {
+    content: '$ ';
+    color: #ff3366;
+  }
 `;
 
 interface CommandOutputProps {
@@ -66,7 +62,7 @@ export const CommandOutput: React.FC<CommandOutputProps> = ({
 }) => {
   return (
     <OutputContainer>
-      {command && <CommandEcho>$ {command}</CommandEcho>}
+      {command && <CommandEcho>{command}</CommandEcho>}
       <OutputLine $type={type}>
         {output}
       </OutputLine>

@@ -1,103 +1,219 @@
 import React, { ReactNode } from 'react';
 import styled, { keyframes } from 'styled-components';
 
-const scanline = keyframes`
-  0% {
-    transform: translateY(-100%);
+const glitchAnim = keyframes`
+  0%, 100% {
+    transform: translate(0);
+    filter: hue-rotate(0deg);
   }
-  100% {
-    transform: translateY(100%);
+  20% {
+    transform: translate(-1px, 1px);
+  }
+  40% {
+    transform: translate(-1px, -1px);
+  }
+  60% {
+    transform: translate(1px, 1px);
+  }
+  80% {
+    transform: translate(1px, -1px);
   }
 `;
 
-const flicker = keyframes`
+const gridMove = keyframes`
   0% {
-    opacity: 0.97;
-  }
-  5% {
-    opacity: 0.95;
-  }
-  10% {
-    opacity: 0.98;
-  }
-  15% {
-    opacity: 0.96;
-  }
-  20% {
-    opacity: 0.97;
+    transform: perspective(500px) rotateX(60deg) translateY(0);
   }
   100% {
-    opacity: 0.97;
+    transform: perspective(500px) rotateX(60deg) translateY(50px);
   }
 `;
 
 const TerminalWrapper = styled.div`
   width: 100vw;
-  height: 100vh;
-  background-color: ${props => props.theme.backgroundColor};
-  color: ${props => props.theme.textColor};
-  font-family: ${props => props.theme.accentFont};
+  min-height: 100vh;
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden;
   
-  /* CRT effect */
+  /* Grid background */
+  &::before {
+    content: '';
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 400px;
+    background-image: 
+      linear-gradient(rgba(255, 51, 102, 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 51, 102, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+    transform: perspective(500px) rotateX(60deg);
+    transform-origin: bottom;
+    pointer-events: none;
+    z-index: 0;
+    animation: ${gridMove} 20s linear infinite;
+    opacity: 0.3;
+  }
+`;
+
+const ChromeFrame = styled.div`
+  max-width: 1400px;
+  margin: 40px auto;
+  padding: 20px;
+  position: relative;
+  z-index: 2;
+  
+  /* Chrome border effect */
+  border: 2px solid;
+  border-image: linear-gradient(
+    135deg,
+    #666 0%,
+    #fff 25%,
+    #666 50%,
+    #fff 75%,
+    #666 100%
+  ) 1;
+  border-radius: 20px;
+  background: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(10px);
+  box-shadow: 
+    0 0 30px rgba(0, 0, 0, 0.8),
+    inset 0 0 30px rgba(0, 0, 0, 0.5),
+    0 0 60px rgba(255, 51, 102, 0.1);
+  
+  /* Inner glow */
   &::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      rgba(18, 16, 16, 0) 50%,
-      rgba(0, 0, 0, 0.25) 50%
-    );
-    background-size: 100% 4px;
+    right: 0;
+    bottom: 0;
+    border-radius: 18px;
+    padding: 2px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+    -webkit-mask: 
+      linear-gradient(#fff 0 0) content-box, 
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
     pointer-events: none;
-    z-index: 2;
   }
+`;
+
+const TopBar = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  margin-bottom: 0;
+  font-family: 'Share Tech Mono', monospace;
+  background: rgba(0, 0, 0, 0.3);
+`;
+
+const Logo = styled.div`
+  font-size: 1em;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: #999;
+  text-transform: uppercase;
   
-  /* Scanline effect */
+  span {
+    color: #ff3366;
+  }
+`;
+
+const NavItems = styled.div`
+  display: flex;
+  gap: 15px;
+  font-size: 0.75em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+`;
+
+const NavItem = styled.button`
+  background: transparent;
+  border: none;
+  color: #999;
+  padding: 8px 20px;
+  padding-bottom: 12px;
+  cursor: pointer;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1em;
+  font-weight: 700;
+  letter-spacing: 2px;
+  transition: all 0.3s ease;
+  position: relative;
+  
+  /* Ruler notches at bottom */
   &::after {
     content: '';
     position: absolute;
-    top: 0;
+    bottom: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      transparent 0%,
-      rgba(0, 255, 0, 0.05) 50%,
-      transparent 100%
+    right: 0;
+    height: 6px;
+    background-image: repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.3) 0px,
+      rgba(255, 255, 255, 0.3) 1px,
+      transparent 1px,
+      transparent 8px
     );
-    animation: ${scanline} 8s linear infinite;
-    pointer-events: none;
-    z-index: 3;
+  }
+  
+  &:hover {
+    color: #fff;
+    
+    &::after {
+      background-image: repeating-linear-gradient(
+        90deg,
+        rgba(255, 51, 102, 0.6) 0px,
+        rgba(255, 51, 102, 0.6) 1px,
+        transparent 1px,
+        transparent 8px
+      );
+    }
+  }
+  
+  &.active {
+    color: #ff3366;
+    
+    &::after {
+      background-image: repeating-linear-gradient(
+        90deg,
+        rgba(255, 51, 102, 0.8) 0px,
+        rgba(255, 51, 102, 0.8) 1px,
+        transparent 1px,
+        transparent 8px
+      );
+    }
   }
 `;
 
-const TerminalScreen = styled.div`
-  width: 100%;
-  height: 100%;
+const TerminalContent = styled.div`
   padding: 20px;
-  overflow-y: auto;
+  min-height: 60vh;
   position: relative;
-  z-index: 1;
-  animation: ${flicker} 0.15s infinite;
-  
-  /* CRT glow effect */
-  text-shadow: 
-    0 0 5px ${props => props.theme.textColor},
-    0 0 10px ${props => props.theme.textColor}40;
-  
-  /* Slight curve effect */
-  border-radius: 10px;
-  box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.5);
+  color: #e0e0e0;
+  font-family: 'Rajdhani', sans-serif;
 `;
 
-const TerminalContent = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
+const CornerInfo = styled.div`
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.75em;
+  color: #666;
+  text-align: right;
+  line-height: 1.6;
+  z-index: 10;
+  
+  div {
+    opacity: 0.7;
+  }
 `;
 
 interface TerminalContainerProps {
@@ -107,11 +223,31 @@ interface TerminalContainerProps {
 export const TerminalContainer: React.FC<TerminalContainerProps> = ({ children }) => {
   return (
     <TerminalWrapper>
-      <TerminalScreen>
+      <ChromeFrame>
+        <TopBar>
+          <Logo>
+            NE<span>O</span>-BBS
+          </Logo>
+          <NavItems>
+            <NavItem>THREADS</NavItem>
+            <NavItem>GUESTS</NavItem>
+            <NavItem>PROFILE</NavItem>
+            <NavItem style={{ borderColor: '#ff3366', color: '#ff3366' }}>
+              CONTACT
+            </NavItem>
+          </NavItems>
+        </TopBar>
+        
         <TerminalContent>
           {children}
         </TerminalContent>
-      </TerminalScreen>
+      </ChromeFrame>
+      
+      <CornerInfo>
+        <div>// SYS.ID</div>
+        <div>// NETWORK.EXE</div>
+        <div>// SESSION.ACTIVE</div>
+      </CornerInfo>
     </TerminalWrapper>
   );
 };

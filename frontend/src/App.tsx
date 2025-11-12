@@ -236,8 +236,6 @@ function AppContent() {
 
   return (
     <>
-      <ASCIIHeader />
-      
       {currentView === 'home' && (
         <BoardList boards={mockBoards} onBoardSelect={handleBoardSelect} />
       )}
