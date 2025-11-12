@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Neo-BBS Admin Login</title>
+    <style>
+        body {
+            background: #000;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            padding: 50px;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            border: 2px solid #00ff00;
+            padding: 30px;
+        }
+        h1 {
+            text-align: center;
+            text-shadow: 0 0 10px #00ff00;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background: #000;
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background: #00ff00;
+            color: #000;
+            border: none;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+        button:hover {
+            box-shadow: 0 0 20px #00ff00;
+        }
+        .message {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #00ff00;
+            display: none;
+        }
+        .error {
+            border-color: #ff0000;
+            color: #ff0000;
+        }
+        .success {
+            border-color: #00ff00;
+            color: #00ff00;
+        }
+        .info {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #888;
+            color: #888;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>👻 ADMIN LOGIN 👻</h1>
+        
+        <form id="loginForm">
+            <div>
+                <label>Email:</label>
+                <input type="email" id="email" value="admin@neobbs.com" required>
+            </div>
+            
+            <div>
+                <label>Password:</label>
+                <input type="password" id="password" value="admin123456" required>
+            </div>
+            
+            <button type="submit">LOGIN</button>
+        </form>
+        
+        <div id="message" class="message"></div>
+        
+        <div class="info">
+            <p><strong>Default Admin Credentials:</strong></p>
+            <p>Email: admin@neobbs.com</p>
+            <p>Password: admin123456</p>
+            <p style="margin-top: 15px;">After successful login, you'll be redirected to the main app with admin access.</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const messageDiv = document.getElementById('message');
+            
+            messageDiv.style.display = 'none';
+            
+            try {
+                const response = await fetch('http://127.0.0.1:8000/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    // Store tokens in localStorage
+                    localStorage.setItem('access_token', data.access_token);
+                    localStorage.setItem('refresh_token', data.refresh_token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    
+                    messageDiv.className = 'message success';
+                    messageDiv.textContent = '✅ Login successful! Redirecting...';
+                    messageDiv.style.display = 'block';
+                    
+                    // Redirect to main app after 1 second
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 1000);
+                } else {
+                    const error = await response.json();
+                    messageDiv.className = 'message error';
+                    messageDiv.textContent = '❌ ' + (error.detail || 'Login failed');
+                    messageDiv.style.display = 'block';
+                }
+            } catch (error) {
+                messageDiv.className = 'message error';
+                messageDiv.textContent = '❌ Network error: ' + error.message;
+                messageDiv.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

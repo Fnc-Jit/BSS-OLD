@@ -29,14 +29,14 @@
     - _Requirements: 10.1, 10.2, 10.3_
 
 - [ ] 3. Implement authentication and authorization system
-  - [ ] 3.1 Create JWT-based authentication service
+  - [x] 3.1 Create JWT-based authentication service
     - Implement user registration endpoint with email validation
     - Implement login endpoint with password verification and JWT generation
     - Create JWT token validation middleware
     - Add token refresh mechanism
     - _Requirements: 2.1, 2.2_
   
-  - [ ] 3.2 Implement role-based access control
+  - [x] 3.2 Implement role-based access control
     - Create authorization decorators for user and admin roles
     - Implement ghost mode access control for admin users
     - Add permission checks for thread/post creation, editing, and deletion
@@ -267,7 +267,7 @@
     - _Requirements: 1.4, 2.1, 2.2_
 
 - [ ] 14. Implement admin ghost mode interface
-  - [ ] 14.1 Create admin control panel
+  - [x] 14.1 Create admin control panel
     - Build ghost mode toggle in admin interface
     - Display moderation logs with filtering options
     - Show active users list with admin indicators

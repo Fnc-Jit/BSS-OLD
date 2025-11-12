@@ -12,6 +12,8 @@ import { GlobalStyles } from './styles/GlobalStyles';
 import { Board, Thread, Post } from './types';
 import { CommandHandler, WelcomeMessage } from './components/Command';
 import { ErrorBoundary } from './components/Error';
+import { AdminPanel } from './components/Admin/AdminPanel';
+import { LoginForm } from './components/Auth/LoginForm';
 
 // Mock data for demonstration
 const mockBoards: Board[] = [
@@ -115,15 +117,36 @@ const mockPosts: Post[] = [
   }
 ];
 
-type View = 'home' | 'board' | 'thread' | 'newThread' | 'reply';
+type View = 'home' | 'board' | 'thread' | 'newThread' | 'reply' | 'admin' | 'login';
 
 function AppContent() {
   const [booting, setBooting] = useState(true);
   const [currentView, setCurrentView] = useState<View>('home');
   const [selectedBoard, setSelectedBoard] = useState<string | null>(null);
   const [selectedThread, setSelectedThread] = useState<string | null>(null);
-  const [isAuthenticated] = useState(false); // Mock auth state
+  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const { setTheme } = useTheme();
+
+  // Check if user is already logged in
+  React.useEffect(() => {
+    const token = localStorage.getItem('access_token');
+    const userStr = localStorage.getItem('user');
+    if (token && userStr) {
+      try {
+        const user = JSON.parse(userStr);
+        setCurrentUser(user);
+        setIsAuthenticated(true);
+      } catch (e) {
+        console.error('Failed to parse user data');
+      }
+    }
+  }, []);
+
+  // Debug logging
+  React.useEffect(() => {
+    console.log('Current view changed to:', currentView);
+  }, [currentView]);
 
   const handleBootComplete = () => {
     setBooting(false);
@@ -144,6 +167,30 @@ function AppContent() {
     setSelectedBoard(null);
     setCurrentView('home');
     setTheme('default');
+  };
+
+  const handleAdminPanel = () => {
+    console.log('Setting view to admin');
+    setCurrentView('admin');
+  };
+
+  const handleLogin = () => {
+    setCurrentView('login');
+  };
+
+  const handleLoginSuccess = (user: any) => {
+    setCurrentUser(user);
+    setIsAuthenticated(true);
+    setCurrentView('home');
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('user');
+    setCurrentUser(null);
+    setIsAuthenticated(false);
+    setCurrentView('home');
   };
 
   const handleBackToBoard = () => {
@@ -233,6 +280,23 @@ function AppContent() {
         />
       )}
 
+      {currentView === 'admin' && (
+        <div style={{ padding: '20px', color: '#00ff00', border: '2px solid #00ff00', margin: '20px' }}>
+          <h1>🎃 ADMIN PANEL TEST 🎃</h1>
+          <p>If you see this, the view is working!</p>
+          <p>Authenticated: {isAuthenticated ? 'Yes' : 'No'}</p>
+          <p>User: {currentUser ? currentUser.username : 'None'}</p>
+          <AdminPanel />
+        </div>
+      )}
+
+      {currentView === 'login' && (
+        <LoginForm 
+          onLoginSuccess={handleLoginSuccess}
+          onCancel={() => setCurrentView('home')}
+        />
+      )}
+
       {/* Welcome message - only on home page */}
       {currentView === 'home' && <WelcomeMessage />}
 
@@ -257,6 +321,10 @@ function AppContent() {
           } else if (destination === 'news') {
             // Navigate to news board
             handleBoardSelect('news');
+          } else if (destination === 'admin') {
+            handleAdminPanel();
+          } else if (destination === 'login') {
+            handleLogin();
           }
         }}
         onBack={() => {

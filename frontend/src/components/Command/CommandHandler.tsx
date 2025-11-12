@@ -97,10 +97,12 @@ export const CommandHandler: React.FC<CommandHandlerProps> = ({
 
   /home              🏠  Return to home page
   /back              ⬅️  Navigate to previous screen
+  /login             🔐  Login or register
   /post              🖊️  Create a new thread
   /read [thread_id]  📖  Read a specific thread
   /news              📰  View latest News Bot bulletin
   /who               👥  List active users (and ghosts)
+  /admin             👻  Open Admin Control Panel (admins only)
   /ascii             🎨  Upload image as ASCII art
   /help              ❓  Show this help message
 
@@ -132,6 +134,29 @@ export const CommandHandler: React.FC<CommandHandlerProps> = ({
         addResult(command, 'Navigating back...', 'success');
       } else {
         addResult(command, 'No previous screen in history', 'error');
+      }
+      return true;
+    }
+
+    // Handle /login locally
+    if (cmd === '/login') {
+      if (onNavigate) {
+        onNavigate('login');
+        addResult(command, '🔐 Opening login form...', 'success');
+      } else {
+        addResult(command, 'Navigation not available', 'error');
+      }
+      return true;
+    }
+
+    // Handle /admin locally
+    if (cmd === '/admin') {
+      console.log('Admin command triggered, onNavigate:', !!onNavigate);
+      if (onNavigate) {
+        onNavigate('admin');
+        addResult(command, '👻 Opening Admin Control Panel...', 'success');
+      } else {
+        addResult(command, 'Navigation not available', 'error');
       }
       return true;
     }
