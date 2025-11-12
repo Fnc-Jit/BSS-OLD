@@ -325,6 +325,8 @@ function AppContent() {
             handleAdminPanel();
           } else if (destination === 'login') {
             handleLogin();
+          } else if (destination === 'logout') {
+            handleLogout();
           }
         }}
         onBack={() => {

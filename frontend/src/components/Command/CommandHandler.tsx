@@ -98,6 +98,7 @@ export const CommandHandler: React.FC<CommandHandlerProps> = ({
   /home              🏠  Return to home page
   /back              ⬅️  Navigate to previous screen
   /login             🔐  Login or register
+  /logout            🚪  Logout from your account
   /post              🖊️  Create a new thread
   /read [thread_id]  📖  Read a specific thread
   /news              📰  View latest News Bot bulletin
@@ -143,6 +144,17 @@ export const CommandHandler: React.FC<CommandHandlerProps> = ({
       if (onNavigate) {
         onNavigate('login');
         addResult(command, '🔐 Opening login form...', 'success');
+      } else {
+        addResult(command, 'Navigation not available', 'error');
+      }
+      return true;
+    }
+
+    // Handle /logout locally
+    if (cmd === '/logout') {
+      if (onNavigate) {
+        onNavigate('logout');
+        addResult(command, '🚪 Logging out...', 'success');
       } else {
         addResult(command, 'Navigation not available', 'error');
       }
